@@ -23,18 +23,20 @@ import org.apache.spark.{SparkConf, SparkContext}
 object TeraGen {
   def main(args: Array[String]) {
 
-    if (args.length < 2) {
+    import java.util.Date
+    val start = System.currentTimeMillis
+    if (args.length < 3) {
       println("Usage:")
       println("DRIVER_MEMORY=[mem] spark-submit " +
         "com.github.ehiggs.spark.terasort.TeraGen " +
         "spark-terasort-1.0-SNAPSHOT-with-dependencies.jar " +
-        "[output-size] [output-directory]")
+        "[output-size] [output-directory] [#partitions]")
       println(" ")
       println("Example:")
       println("DRIVER_MEMORY=50g spark-submit " +
         "com.github.ehiggs.spark.terasort.TeraGen " +
         "spark-terasort-1.0-SNAPSHOT-with-dependencies.jar " +
-        "100G file:///scratch/username/terasort_in")
+        "100G file:///scratch/username/terasort_in 128")
       System.exit(0)
     }
 
@@ -48,7 +50,7 @@ object TeraGen {
       .setAppName(s"TeraGen ($size)")
     val sc = new SparkContext(conf)
 
-    val parts = sc.defaultMinPartitions
+    val parts = args(2).toInt 
     val recordsPerPartition = outputSizeInBytes / 100 / parts.toLong
     val numRecords = recordsPerPartition * parts.toLong
 
@@ -93,6 +95,9 @@ object TeraGen {
     dataset.saveAsNewAPIHadoopFile[TeraOutputFormat](outputFile)
 
     println("Number of records written: " + dataset.count())
+   val endd = new Date()
+   val duration =  ((endd.getTime - start) / 100).toInt
+   println(s"***  COMPLETED TERASORT: ${endd.toString} duration=$duration secs ***")
   }
 
   def sizeStrToBytes(str: String): Long = {

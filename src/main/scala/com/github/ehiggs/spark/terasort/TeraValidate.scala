@@ -34,6 +34,8 @@ object TeraValidate {
 
   def main(args: Array[String]) {
 
+    import java.util.Date
+    val start = System.currentTimeMillis
     if (args.length < 1) {
       println("Usage:")
       println("DRIVER_MEMORY=[mem] spark-submit " +
@@ -59,6 +61,9 @@ object TeraValidate {
 
     val dataset = sc.newAPIHadoopFile[Array[Byte], Array[Byte], TeraInputFormat](inputFile)
     validate(sc, dataset)
+     val endd = new Date()
+     val duration =  ((endd.getTime - start) / 100).toInt
+     println(s"***  COMPLETED TERAVALIDAT: ${endd.toString} duration=$duration secs ***")
   }
 
   def validate(sc : SparkContext, dataset: RDD[(Array[Byte], Array[Byte])]) : Unit = {

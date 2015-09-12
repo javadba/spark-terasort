@@ -33,6 +33,8 @@ object TeraSort {
 
   def main(args: Array[String]) {
 
+    import java.util.Date
+    val start = System.currentTimeMillis
     if (args.length < 2) {
       println("Usage:")
       println("DRIVER_MEMORY=[mem] spark-submit " +
@@ -60,5 +62,8 @@ object TeraSort {
     val dataset = sc.newAPIHadoopFile[Array[Byte], Array[Byte], TeraInputFormat](inputFile)
     val sorted = dataset.partitionBy(new TeraSortPartitioner(dataset.partitions.size)).sortByKey()
     sorted.saveAsNewAPIHadoopFile[TeraOutputFormat](outputFile)
+     val endd = new Date()
+     val duration =  ((endd.getTime - start) / 100).toInt
+     println(s"***  COMPLETED TERASORT: ${endd.toString} duration=$duration secs ***")
   }
 }
