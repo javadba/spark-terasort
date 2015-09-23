@@ -63,7 +63,7 @@ object TeraSort {
     val sorted = dataset.partitionBy(new TeraSortPartitioner(dataset.partitions.size)).sortByKey()
     sorted.saveAsNewAPIHadoopFile[TeraOutputFormat](outputFile)
      val endd = new Date()
-     val duration =  ((endd.getTime - start) / 100).toInt
+     val duration =  ((endd.getTime - start) / 100).toInt /10.0
      println(s"***  COMPLETED TERASORT: ${endd.toString} duration=$duration secs ***")
   }
 }
