@@ -29,6 +29,7 @@ case class TeraSortPartitioner(numPartitions: Int) extends Partitioner {
 
   import TeraSortPartitioner._
 
+  println(s"TeraSortPartitioner with $numPartitions partitions")
   val rangePerPart = (max - min) / numPartitions
 
   override def getPartition(key: Any): Int = {
