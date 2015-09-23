@@ -97,7 +97,7 @@ object TeraGen {
     println("Number of records written: " + dataset.count())
    val endd = new Date()
    val duration =  ((endd.getTime - start) / 100).toInt / 10.0
-   println(s"***  COMPLETED TERASORT: ${endd.toString} duration=$duration secs ***")
+   println(s"***  COMPLETED TERAGEN: ${endd.toString} duration=$duration secs ***")
   }
 
   def sizeStrToBytes(str: String): Long = {
